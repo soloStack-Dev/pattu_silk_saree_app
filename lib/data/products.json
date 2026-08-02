@@ -1,0 +1,134 @@
+[
+  {
+    "id": "ks-01",
+    "name": "Rudraksha Red Kanjivaram",
+    "category": "Bridal",
+    "fabric": "Mulberry Silk",
+    "occasion": "Bridal",
+    "color": "Red",
+    "price": 24999,
+    "badge": "Best Seller",
+    "image": "/asserts/collection-page-images/red-saree-image-collection-product-one.png"
+  },
+  {
+    "id": "ks-02",
+    "name": "Rosewater Chiffon Silk",
+    "category": "Festive",
+    "fabric": "Chiffon Silk",
+    "occasion": "Festive",
+    "color": "Pink",
+    "price": 18999,
+    "badge": "New",
+    "image": "/asserts/collection-page-images/pink-saree-image-collection-product-two.png"
+  },
+  {
+    "id": "ks-03",
+    "name": "Mayil Peacock Green Tissue",
+    "category": "Bridal",
+    "fabric": "Tissue Silk",
+    "occasion": "Bridal",
+    "color": "Peacock Green",
+    "price": 26999,
+    "badge": "Best Seller",
+    "image": "/asserts/collection-page-images/pecockgreen-saree-image-collection-product-three.png"
+  },
+  {
+    "id": "ks-04",
+    "name": "Crimson Temple Border Silk",
+    "category": "Bridal",
+    "fabric": "Korvai Silk",
+    "occasion": "Bridal",
+    "color": "Red",
+    "price": 28999,
+    "badge": "",
+    "image": "/asserts/collection-page-images/product-image-four.jpg"
+  },
+  {
+    "id": "ks-05",
+    "name": "Blush Nocturne Georgette",
+    "category": "Contemporary",
+    "fabric": "Georgette",
+    "occasion": "Casual",
+    "color": "Pink",
+    "price": 12999,
+    "badge": "New",
+    "image": "/asserts/collection-page-images/product-image-five.jpg"
+  },
+  {
+    "id": "ks-06",
+    "name": "Emerald Dynasty Banarasi",
+    "category": "Festive",
+    "fabric": "Banarasi Silk",
+    "occasion": "Festive",
+    "color": "Peacock Green",
+    "price": 21999,
+    "badge": "",
+    "image": "/asserts/collection-page-images/product-image-six.jpg"
+  },
+  {
+    "id": "ks-07",
+    "name": "Maharani Maroon Zari",
+    "category": "Bridal",
+    "fabric": "Mulberry Silk",
+    "occasion": "Bridal",
+    "color": "Red",
+    "price": 31999,
+    "badge": "Limited",
+    "image": "/asserts/collection-page-images/product-image-seven.jpg"
+  },
+  {
+    "id": "ks-08",
+    "name": "First Dawn Pastel Silk",
+    "category": "Contemporary",
+    "fabric": "Tussar Silk",
+    "occasion": "Casual",
+    "color": "Pink",
+    "price": 14999,
+    "badge": "",
+    "image": "/asserts/collection-page-images/product-image-eight.jpg"
+  },
+  {
+    "id": "ks-09",
+    "name": "Nightingale Green Kanjivaram",
+    "category": "Festive",
+    "fabric": "Korvai Silk",
+    "occasion": "Festive",
+    "color": "Peacock Green",
+    "price": 20999,
+    "badge": "New",
+    "image": "/asserts/collection-page-images/product-image-nine.jpg"
+  },
+  {
+    "id": "ks-10",
+    "name": "Vermilion Lotus Chiffon",
+    "category": "Festive",
+    "fabric": "Chiffon Silk",
+    "occasion": "Festive",
+    "color": "Red",
+    "price": 16999,
+    "badge": "",
+    "image": "/asserts/collection-page-images/product-image-ten.jpg"
+  },
+  {
+    "id": "ks-11",
+    "name": "Ivory Sandalwood Georgette",
+    "category": "Contemporary",
+    "fabric": "Georgette",
+    "occasion": "Casual",
+    "color": "Pink",
+    "price": 13999,
+    "badge": "",
+    "image": "/asserts/collection-page-images/product-image-eleven.jpg"
+  },
+  {
+    "id": "ks-12",
+    "name": "Pond Lily Green Tussar",
+    "category": "Contemporary",
+    "fabric": "Tussar Silk",
+    "occasion": "Casual",
+    "color": "Peacock Green",
+    "price": 15999,
+    "badge": "New",
+    "image": "/asserts/collection-page-images/product-image-12.jpg"
+  }
+]
