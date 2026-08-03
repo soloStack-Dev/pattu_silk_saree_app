@@ -10,6 +10,11 @@ import { Reveal } from "@/components/reveal";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/* ========================================================================== */
+/* STATIC CONTENT — kept outside the component so the JSX stays readable.      */
+/* ========================================================================== */
+
+/* Two "pillar" cards that explain the brand vision. */
 const VISION_CARDS = [
   {
     icon: "/asserts/about-page-images/aboutpage-icon.png",
@@ -23,12 +28,14 @@ const VISION_CARDS = [
   },
 ];
 
+/* Checklist items under the "craftsmanship" section. */
 const CHECKLIST = [
   { icon: "/asserts/about-page-images/aboutpage-icon.png", text: "Ethically sourced Mulberry and Tussar silk." },
   { icon: "/asserts/about-page-images/aboutpage-icon-two.png", text: "Pure Zari containing certified silver and gold." },
   { icon: "/asserts/about-page-images/aboutpage-icon-three.png", text: "Limited production runs to maintain exclusivity." },
 ];
 
+/* Company milestones — `side` decides which rail the card sits on. */
 const TIMELINE = [
   {
     year: "2020",
@@ -50,26 +57,41 @@ const TIMELINE = [
   },
 ];
 
+/* ========================================================================== */
+/* PAGE — the About / philosophy page                                          */
+/* ========================================================================== */
+
 export default function AboutPage() {
   const timelineRef = useRef<HTMLDivElement>(null);
 
+  // ---------- timeline scroll animations ----------
   useLayoutEffect(() => {
     const el = timelineRef.current;
     if (!el) return;
+
     const ctx = gsap.context(() => {
+      // 1. The vertical rail grows from top to bottom as the user scrolls.
       gsap.fromTo(
         ".timeline-line",
         { scaleY: 0 },
         {
           scaleY: 1,
           ease: "none",
-          scrollTrigger: { trigger: el, start: "top 75%", end: "bottom 60%", scrub: 0.6 },
+          scrollTrigger: {
+            trigger: el,
+            start: "top 75%",
+            end: "bottom 60%",
+            scrub: 0.6,
+          },
         },
       );
+
+      // 2. Each milestone card slides in from its own side.
       gsap.utils.toArray<HTMLElement>(".milestone").forEach((m) => {
+        const fromLeft = m.classList.contains("milestone-left");
         gsap.fromTo(
           m,
-          { autoAlpha: 0, x: m.classList.contains("milestone-left") ? -40 : 40 },
+          { autoAlpha: 0, x: fromLeft ? -40 : 40 },
           {
             autoAlpha: 1,
             x: 0,
@@ -79,6 +101,8 @@ export default function AboutPage() {
           },
         );
       });
+
+      // 3. The dot markers pop in with a springy scale.
       gsap.utils.toArray<HTMLElement>(".timeline-dot").forEach((d) => {
         gsap.fromTo(
           d,
@@ -92,9 +116,12 @@ export default function AboutPage() {
         );
       });
     }, el);
+
+    // Revert all animations when the page unmounts (GSAP best practice).
     return () => ctx.revert();
   }, []);
 
+  // ---------- render ----------
   return (
     <>
       {/* ---------- hero ---------- */}
@@ -104,9 +131,10 @@ export default function AboutPage() {
             <p className="eyebrow">Our Philosophy</p>
             <h1 className="about-hero__title">Preserving Modern Heritage</h1>
             <p className="about-hero__body">
-              AARYA is born from a desire to bridge the gap between ancient Indian
-              craftsmanship and the contemporary global silhouette. We believe
-              heritage isn&apos;t a museum piece; it&apos;s a living, breathing dialogue.
+              AARYA is born from a desire to bridge the gap between ancient
+              Indian craftsmanship and the contemporary global silhouette. We
+              believe heritage isn&apos;t a museum piece; it&apos;s a living,
+              breathing dialogue.
             </p>
           </Reveal>
         </div>
@@ -130,19 +158,19 @@ export default function AboutPage() {
               <h2 className="vision__heading">The Vision of Refinement</h2>
               <p className="vision__body">
                 Founded in 2024, AARYA was established to redefine how the world
-                views ethnic couture. We discard the heavy, the cluttered, and the
-                temporary in favor of the timeless, the precise, and the meaningful.
+                views ethnic couture. We discard the heavy, the cluttered, and
+                the temporary in favor of the timeless, the precise, and the
+                meaningful.
               </p>
             </Reveal>
           </div>
+          {/* Two pillar cards, each revealed slightly later than the last. */}
           <div className="vision__cards">
             {VISION_CARDS.map((card, i) => (
               <Reveal key={card.title} delay={i * 0.12} y={30}>
                 <div className="vision-card">
                   <Image src={card.icon} alt="" width={28} height={28} />
-                  <h3 className="vision-card__title">
-                    {card.title}
-                  </h3>
+                  <h3 className="vision-card__title">{card.title}</h3>
                   <p className="vision-card__body">{card.body}</p>
                 </div>
               </Reveal>
@@ -167,11 +195,13 @@ export default function AboutPage() {
               <p className="eyebrow">The Hands of Heritage</p>
               <h2 className="craft__title">Uncompromising Craftsmanship</h2>
               <p className="craft__body">
-                We collaborate directly with master weavers in Banaras, Kanchipuram,
-                and Chanderi. These relationships are the soul of AARYA. By
-                eliminating middlemen, we ensure our artisans receive fair
-                compensation while we gain unparalleled control over every thread.
+                We collaborate directly with master weavers in Banaras,
+                Kanchipuram, and Chanderi. These relationships are the soul of
+                AARYA. By eliminating middlemen, we ensure our artisans receive
+                fair compensation while we gain unparalleled control over every
+                thread.
               </p>
+              {/* Checklist items with staggered reveals. */}
               <ul className="craft-list">
                 {CHECKLIST.map((item, i) => (
                   <Reveal key={item.text} delay={i * 0.15} y={20}>
@@ -198,29 +228,29 @@ export default function AboutPage() {
           </Reveal>
 
           <div className="timeline__rail">
+            {/* The animated vertical line the dots sit on. */}
             <div className="timeline__line timeline-line" />
             <div className="timeline__items">
               {TIMELINE.map((m) => {
+                // Alternate the card between the left and right rail.
                 const isLeft = m.side === "left";
                 return (
                   <div
                     key={m.year}
                     className={
-                      isLeft ? "timeline__item timeline__item--left" : "timeline__item timeline__item--right"
+                      isLeft
+                        ? "timeline__item timeline__item--left"
+                        : "timeline__item timeline__item--right"
                     }
                   >
                     <span className="timeline-dot timeline__dot" />
                     <div
                       className={
-                        isLeft
-                          ? "milestone milestone-left"
-                          : "milestone milestone-right"
+                        isLeft ? "milestone milestone-left" : "milestone milestone-right"
                       }
                     >
                       <p className="timeline__year">{m.year}</p>
-                      <p className="timeline__label">
-                        {m.label}
-                      </p>
+                      <p className="timeline__label">{m.label}</p>
                       <p className="timeline__body">{m.body}</p>
                     </div>
                   </div>
@@ -235,7 +265,8 @@ export default function AboutPage() {
       <section className="cta-quote">
         <Reveal>
           <p className="cta-quote__text">
-            &ldquo;A garment that tells a story, a fabric that holds a legacy.&rdquo;
+            &ldquo;A garment that tells a story, a fabric that holds a
+            legacy.&rdquo;
           </p>
           <div className="cta-quote__actions">
             <Link href="/collection" className="btn-primary">

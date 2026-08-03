@@ -11,21 +11,18 @@ import { Newsletter } from "@/components/newsletter";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/* ========================================================================== */
+/* STATIC CONTENT — all blog copy lives here, away from the JSX.               */
+/* ========================================================================== */
+
+/* Three category tiles under the hero. */
 const CATEGORY_CARDS = [
-  {
-    image: "/asserts/blog-page-images/heroalongsubsection-image.png",
-    label: "Style Guide",
-  },
-  {
-    image: "/asserts/blog-page-images/heroalongsubsection-image-two.png",
-    label: "Heritage Care",
-  },
-  {
-    image: "/asserts/blog-page-images/heroalongsubsection-image-three.png",
-    label: "Trends",
-  },
+  { image: "/asserts/blog-page-images/heroalongsubsection-image.png", label: "Style Guide" },
+  { image: "/asserts/blog-page-images/heroalongsubsection-image-two.png", label: "Heritage Care" },
+  { image: "/asserts/blog-page-images/heroalongsubsection-image-three.png", label: "Trends" },
 ];
 
+/* Text-only article links (row 1). */
 const TEXT_CARDS = [
   {
     title: "5 Ways to Style a Banarasi for the Modern Wedding",
@@ -41,6 +38,7 @@ const TEXT_CARDS = [
   },
 ];
 
+/* Image-led editorial cards (row 2). */
 const EDITORIAL_CARDS = [
   {
     image: "/asserts/blog-page-images/mainsection-image-one.png",
@@ -56,19 +54,31 @@ const EDITORIAL_CARDS = [
   },
 ];
 
+/* ========================================================================== */
+/* READING PROGRESS — a thin bar at the top that fills as the page scrolls.    */
+/* ========================================================================== */
+
 function ReadingProgress() {
   const barRef = useRef<HTMLDivElement>(null);
+
   useLayoutEffect(() => {
+    // Update the bar's fill based on how far down the page the user is.
     const onScroll = () => {
       const h = document.documentElement;
-      const max = h.scrollHeight - window.innerHeight;
-      const p = max > 0 ? window.scrollY / max : 0;
-      if (barRef.current) barRef.current.style.transform = `scaleX(${p})`;
+      const maxScroll = h.scrollHeight - window.innerHeight;
+      // progress goes 0 → 1 across the full scrollable distance.
+      const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+      if (barRef.current) {
+        barRef.current.style.transform = `scaleX(${progress})`;
+      }
     };
+
+    // Run once on mount (to set the 0% state) then on every scroll event.
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
   return (
     <div className="reading-progress">
       <div ref={barRef} className="reading-progress__bar" />
@@ -76,13 +86,21 @@ function ReadingProgress() {
   );
 }
 
+/* ========================================================================== */
+/* PAGE — the journal / blog                                                  */
+/* ========================================================================== */
+
 export default function BlogPage() {
   const parallaxRef = useRef<HTMLDivElement>(null);
 
+  // ---------- featured image parallax ----------
   useLayoutEffect(() => {
     const el = parallaxRef.current;
     if (!el) return;
+
     const ctx = gsap.context(() => {
+      // Slowly move the featured image opposite the scroll direction
+      // so it drifts inside its frame, giving a subtle depth effect.
       gsap.fromTo(
         ".featured-img",
         { yPercent: -8, scale: 1.06 },
@@ -90,13 +108,20 @@ export default function BlogPage() {
           yPercent: 8,
           scale: 1.06,
           ease: "none",
-          scrollTrigger: { trigger: el, start: "top top", end: "bottom top", scrub: true },
+          scrollTrigger: {
+            trigger: el,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
         },
       );
     }, el);
+
     return () => ctx.revert();
   }, []);
 
+  // ---------- render ----------
   return (
     <>
       <ReadingProgress />
@@ -104,11 +129,12 @@ export default function BlogPage() {
       {/* ---------- hero header ---------- */}
       <section className="blog-hero">
         <Reveal y={20}>
-          <div className="container-1280" style={{ textAlign: "center", maxWidth: 700 }}>
+          <div
+            className="container-1280"
+            style={{ textAlign: "center", maxWidth: 700 }}
+          >
             <p className="blog-hero__label">The Journal</p>
-            <h1 className="blog-hero__title">
-              Modern Heritage &amp; Artistry
-            </h1>
+            <h1 className="blog-hero__title">Modern Heritage &amp; Artistry</h1>
           </div>
         </Reveal>
       </section>
@@ -116,6 +142,7 @@ export default function BlogPage() {
       {/* ---------- featured article ---------- */}
       <section ref={parallaxRef} className="blog-featured">
         <div className="container-1280 blog-featured__grid">
+          {/* The parallax-driven image sits inside an overflow-hidden frame. */}
           <div className="blog-featured__media">
             <div className="blog-featured__media-inner">
               <Image
@@ -128,20 +155,23 @@ export default function BlogPage() {
               />
             </div>
           </div>
+          {/* Feature copy + a read link. */}
           <div>
             <Reveal delay={0.1}>
-              <p className="blog-featured__meta">
-                Craftsmanship / May 2024
-              </p>
+              <p className="blog-featured__meta">Craftsmanship / May 2024</p>
               <h2 className="blog-featured__title">
                 The Evolution of the Saree: From Royal Courts to Global Runways
               </h2>
               <p className="blog-featured__body">
-                An exploration of how the timeless six-yard garment has transformed
-                through centuries, preserving its soul while embracing contemporary
-                silhouettes.
+                An exploration of how the timeless six-yard garment has
+                transformed through centuries, preserving its soul while
+                embracing contemporary silhouettes.
               </p>
-              <Link href="#" className="btn-underline" style={{ marginTop: "1.75rem" }}>
+              <Link
+                href="#"
+                className="btn-underline"
+                style={{ marginTop: "1.75rem" }}
+              >
                 Read the Feature
                 <ArrowRight size={14} strokeWidth={1.5} />
               </Link>
@@ -164,9 +194,7 @@ export default function BlogPage() {
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
                 </div>
-                <p className="blog-cat__label">
-                  {card.label}
-                </p>
+                <p className="blog-cat__label">{card.label}</p>
               </Link>
             </Reveal>
           ))}
@@ -180,13 +208,9 @@ export default function BlogPage() {
             <Reveal key={card.title} delay={i * 0.12} y={30}>
               <article className="blog-article">
                 <Link href="#" className="blog-article__link">
-                  <h3 className="blog-article__title">
-                    {card.title}
-                  </h3>
+                  <h3 className="blog-article__title">{card.title}</h3>
                 </Link>
-                <p className="blog-article__body">
-                  {card.body}
-                </p>
+                <p className="blog-article__body">{card.body}</p>
                 <span className="blog-article__link">
                   Read <ArrowUpRight size={13} strokeWidth={1.5} />
                 </span>
@@ -219,9 +243,7 @@ export default function BlogPage() {
                 </div>
                 <div className="blog-edit__content">
                   <p className="blog-edit__label">{card.label}</p>
-                  <h3 className="blog-edit__title">
-                    {card.title}
-                  </h3>
+                  <h3 className="blog-edit__title">{card.title}</h3>
                   <p className="blog-edit__body">{card.body}</p>
                   <span className="blog-edit__more">Read More</span>
                 </div>

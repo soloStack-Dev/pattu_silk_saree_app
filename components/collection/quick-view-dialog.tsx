@@ -7,19 +7,48 @@ import { X, ShoppingBag, ShieldCheck, RotateCcw, Truck } from "lucide-react";
 import { formatPrice, type Product } from "@/lib/data/products";
 import { useCartStore } from "@/lib/store/cart-store";
 
+/* ========================================================================== */
+/* PROPS                                                                       */
+/* ========================================================================== */
+
 type QuickViewDialogProps = {
-  product: Product | null;
+  product: Product | null; // null => dialog is closed
   onClose: () => void;
 };
+
+/* ========================================================================== */
+/* HELPERS                                                                     */
+/* ========================================================================== */
+
+/** Map a product colour name to the small dot colour shown beside it. */
+function colorDotColor(color: string): string {
+  switch (color) {
+    case "Red":
+      return "#b91c1c";
+    case "Pink":
+      return "#f9a8d4";
+    default:
+      return "#166534"; // Peacock Green
+  }
+}
+
+/* ========================================================================== */
+/* COMPONENT — full product details in a modal                                */
+/* ========================================================================== */
 
 export function QuickViewDialog({ product, onClose }: QuickViewDialogProps) {
   const addItem = useCartStore((s) => s.addItem);
 
+  // ---------- handlers ----------
+
+  /** Add the viewed product to the bag, then close the dialog. */
   const onAddToBag = () => {
     if (!product) return;
     addItem(product);
     onClose();
   };
+
+  // ---------- render ----------
   return (
     <Dialog
       open={Boolean(product)}
@@ -39,14 +68,22 @@ export function QuickViewDialog({ product, onClose }: QuickViewDialogProps) {
     >
       {product && (
         <div className="qv-dialog">
+          {/* Close button, positioned top-right. */}
           <IconButton
             aria-label="Close"
             onClick={onClose}
-            sx={{ position: "absolute", right: 12, top: 12, zIndex: 10, color: "#1a1a1a" }}
+            sx={{
+              position: "absolute",
+              right: 12,
+              top: 12,
+              zIndex: 10,
+              color: "#1a1a1a",
+            }}
           >
             <X size={20} strokeWidth={1.5} />
           </IconButton>
 
+          {/* Left column — the product photograph. */}
           <div className="qv-dialog__media">
             <Image
               src={product.image}
@@ -56,17 +93,15 @@ export function QuickViewDialog({ product, onClose }: QuickViewDialogProps) {
             />
           </div>
 
+          {/* Right column — name, price and key facts. */}
           <div className="qv-dialog__body">
             <p className="qv-dialog__label">
               The Heritage Collection · {product.category}
             </p>
-            <h3 className="qv-dialog__name">
-              {product.name}
-            </h3>
-            <p className="qv-dialog__price">
-              {formatPrice(product.price)}
-            </p>
+            <h3 className="qv-dialog__name">{product.name}</h3>
+            <p className="qv-dialog__price">{formatPrice(product.price)}</p>
 
+            {/* Spec list: fabric / occasion / colour. */}
             <div className="qv-dialog__specs">
               <div className="qv-dialog__spec">
                 <span className="qv-dialog__spec-label">Fabric</span>
@@ -78,18 +113,18 @@ export function QuickViewDialog({ product, onClose }: QuickViewDialogProps) {
               </div>
               <div className="qv-dialog__spec">
                 <span className="qv-dialog__spec-label">Colour</span>
-                <span style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                  }}
+                >
                   {product.color}
+                  {/* Small visual swatch for the colour. */}
                   <span
                     className="qv-dialog__color-dot"
-                    style={{
-                      background:
-                        product.color === "Red"
-                          ? "#b91c1c"
-                          : product.color === "Pink"
-                            ? "#f9a8d4"
-                            : "#166534",
-                    }}
+                    style={{ background: colorDotColor(product.color) }}
                   />
                 </span>
               </div>
@@ -101,15 +136,15 @@ export function QuickViewDialog({ product, onClose }: QuickViewDialogProps) {
               and passed down.
             </p>
 
+            {/* Primary call-to-actions. */}
             <div className="qv-dialog__actions">
               <button className="btn-primary" onClick={onAddToBag}>
                 <ShoppingBag size={15} strokeWidth={1.5} /> Add to Bag
               </button>
-              <button className="btn-outline">
-                Book an Atelier Visit
-              </button>
+              <button className="btn-outline">Book an Atelier Visit</button>
             </div>
 
+            {/* Trust signals shown under the buttons. */}
             <div className="qv-dialog__services">
               <div className="qv-dialog__service">
                 <Truck size={16} strokeWidth={1.5} />
